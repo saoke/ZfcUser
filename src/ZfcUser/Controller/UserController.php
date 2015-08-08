@@ -79,6 +79,13 @@ class UserController extends AbstractActionController
         if (!$this->zfcUserAuthentication()->hasIdentity()) {
             return $this->redirect()->toRoute(static::ROUTE_LOGIN);
         }
+        //如果是后台用户则跳转到后台
+        $_IdentityRole = $this->getServiceLocator()->get('ZfcRbac\Service\RoleService')->getIdentityRoles();
+        if ($_IdentityRole){
+            if ('admin' == $_IdentityRole[0]->getName()) {
+                return $this->redirect()->toRoute('zfcadmin');
+            }
+        }
         return new ViewModel();
     }
 
